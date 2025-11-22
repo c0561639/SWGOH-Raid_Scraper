@@ -1,0 +1,2 @@
+# SWGOH-Raid_Scraper
+
