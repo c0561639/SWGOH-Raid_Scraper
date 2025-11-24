@@ -3,8 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\seane\\OneDrive - Lambton College\\Term 3\\CSD-4503 - DevOps\\SWGOH-Raid_Scraper\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{79D13D17-2500-9B80-A88B-7255C37BE119}|SWGOH-Raid_Scraper.csproj|c:\\users\\seane\\onedrive - lambton college\\term 3\\csd-4503 - devops\\swgoh-raid_scraper\\.env||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{79D13D17-2500-9B80-A88B-7255C37BE119}|SWGOH-Raid_Scraper.csproj|solutionrelative:.env||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{79D13D17-2500-9B80-A88B-7255C37BE119}|SWGOH-Raid_Scraper.csproj|c:\\users\\seane\\onedrive - lambton college\\term 3\\csd-4503 - devops\\swgoh-raid_scraper\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{79D13D17-2500-9B80-A88B-7255C37BE119}|SWGOH-Raid_Scraper.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{79D13D17-2500-9B80-A88B-7255C37BE119}|SWGOH-Raid_Scraper.csproj|c:\\users\\seane\\onedrive - lambton college\\term 3\\csd-4503 - devops\\swgoh-raid_scraper\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{79D13D17-2500-9B80-A88B-7255C37BE119}|SWGOH-Raid_Scraper.csproj|solutionrelative:.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,19 +22,45 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": ".gitignore",
+              "DocumentMoniker": "C:\\Users\\seane\\OneDrive - Lambton College\\Term 3\\CSD-4503 - DevOps\\SWGOH-Raid_Scraper\\.gitignore",
+              "RelativeDocumentMoniker": ".gitignore",
+              "ToolTip": "C:\\Users\\seane\\OneDrive - Lambton College\\Term 3\\CSD-4503 - DevOps\\SWGOH-Raid_Scraper\\.gitignore",
+              "RelativeToolTip": ".gitignore",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-11-24T22:55:07.926Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": ".env",
+              "DocumentMoniker": "C:\\Users\\seane\\OneDrive - Lambton College\\Term 3\\CSD-4503 - DevOps\\SWGOH-Raid_Scraper\\.env",
+              "RelativeDocumentMoniker": ".env",
+              "ToolTip": "C:\\Users\\seane\\OneDrive - Lambton College\\Term 3\\CSD-4503 - DevOps\\SWGOH-Raid_Scraper\\.env",
+              "RelativeToolTip": ".env",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-11-24T22:52:26.017Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\seane\\OneDrive - Lambton College\\Term 3\\CSD-4503 - DevOps\\SWGOH-Raid_Scraper\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "C:\\Users\\seane\\OneDrive - Lambton College\\Term 3\\CSD-4503 - DevOps\\SWGOH-Raid_Scraper\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAE0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-22T22:38:18.276Z",
+              "WhenOpened": "2025-11-24T22:47:20.936Z",
               "EditorCaption": ""
             }
           ]

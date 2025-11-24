@@ -1,20 +1,36 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using HtmlAgilityPack;
 
 class Program
 {
     //Guild’s raid-history base URL
-    private const string GuildRaidBaseUrl = "https://swgoh.gg/g/nA8P3kQJRMyA7VqglhVOqQ/raid-history/";
+    private const string GuildRaidBaseUrl =
+        "https://swgoh.gg/g/nA8P3kQJRMyA7VqglhVOqQ/raid-history/";
 
     //Folder where local HTML saves are stored
     private const string HtmlFolder = "html_files";
 
-    //Discord webhook URL
-    private const string DiscordWebhookUrl = "https://discord.com/api/webhooks/1441898139081637918/cwSMpH5T9yxj2IJnrZvlWtP-HrwL_GMZ0RhqE1KK86HAprn8PrGXv1NlKFcL4tlGYmfc";
-
     static async Task Main()
     {
+        //Find out the project root
+        string projectRoot = Path.GetFullPath(
+            Path.Combine(AppContext.BaseDirectory, "..", "..", "..")
+        );
+
+        //Load webhook URL from .env
+        string? webhookUrl = LoadWebhookUrl(projectRoot);
+        if (string.IsNullOrWhiteSpace(webhookUrl))
+        {
+            Console.WriteLine("ERROR: Could not find DISCORD_WEBHOOK_URL in .env");
+            Console.WriteLine($"Expected .env at: {Path.Combine(projectRoot, ".env")}");
+            return;
+        }
+
         Console.WriteLine("Enter the raid ID (the part after /raid-history/), e.g. bb0ea6749c:");
         string raidId = Console.ReadLine()?.Trim() ?? "";
         raidId = raidId.Trim('/');
@@ -25,7 +41,7 @@ class Program
             return;
         }
 
-        //Build full SWGOH.GG link
+        //Build full SWGOH.GG URL
         string raidUrl = GuildRaidBaseUrl + raidId + "/";
 
         Console.WriteLine($"\nOpening raid page in your default browser:\n{raidUrl}\n");
@@ -35,11 +51,8 @@ class Program
             UseShellExecute = true
         });
 
-        //Ensure html_files exists
-        string projectRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", ".."));
-
+        //Ensure html_files exists at project root
         string htmlDir = Path.Combine(projectRoot, HtmlFolder);
-
         if (!Directory.Exists(htmlDir))
         {
             Directory.CreateDirectory(htmlDir);
@@ -53,13 +66,13 @@ class Program
         Console.WriteLine("\nPress ENTER here once you've saved the file...");
         Console.ReadLine();
 
+        //Expected file path: <projectRoot>/html_files/<raidId>.html
         string filePath = Path.Combine(htmlDir, raidId + ".html");
-
 
         if (!File.Exists(filePath))
         {
             Console.WriteLine($"ERROR: File not found: {filePath}");
-            Console.WriteLine("Did you save it in the correct folder?");
+            Console.WriteLine("Did you save it with the correct name and in the correct folder?");
             return;
         }
 
@@ -102,18 +115,17 @@ class Program
         string discordMessage;
         if (!foundMissing)
         {
-            discordMessage = $"**Raid `{raidId}` Report:**\nAll members contributed! 🎉";
+            discordMessage = $"**Raid `{raidId}` Report:**\nAll members contributed!";
         }
         else
         {
             discordMessage = $"**Raid `{raidId}` - Players with no raid score:**\n{missingList}";
         }
 
-        //Send to Discord via webhook
         Console.WriteLine("\nSending report to Discord...");
         try
         {
-            await SendDiscordMessage(DiscordWebhookUrl, discordMessage);
+            await SendDiscordMessageAsync(webhookUrl, discordMessage);
             Console.WriteLine("Posted to Discord!");
         }
         catch (Exception ex)
@@ -126,7 +138,41 @@ class Program
         Console.ReadKey();
     }
 
-    private static async Task SendDiscordMessage(string webhookUrl, string text)
+    private static string? LoadWebhookUrl(string projectRoot)
+    {
+        string envPath = Path.Combine(projectRoot, ".env");
+
+        if (!File.Exists(envPath))
+        {
+            Console.WriteLine($"WARNING: .env file not found at: {envPath}");
+            return null;
+        }
+
+        foreach (var line in File.ReadAllLines(envPath))
+        {
+            var trimmed = line.Trim();
+
+            //Skip comments and empty lines
+            if (string.IsNullOrWhiteSpace(trimmed) || trimmed.StartsWith("#"))
+                continue;
+
+            int equalsIndex = trimmed.IndexOf('=');
+            if (equalsIndex <= 0)
+                continue;
+
+            string key = trimmed[..equalsIndex].Trim();
+            string value = trimmed[(equalsIndex + 1)..].Trim();
+
+            if (key.Equals("DISCORD_WEBHOOK_URL", StringComparison.OrdinalIgnoreCase))
+            {
+                return value;
+            }
+        }
+
+        return null;
+    }
+
+    private static async Task SendDiscordMessageAsync(string webhookUrl, string text)
     {
         using var client = new HttpClient();
         var json = $"{{\"content\": \"{EscapeJson(text)}\"}}";
