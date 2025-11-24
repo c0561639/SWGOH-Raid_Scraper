@@ -1,0 +1,13 @@
+.git
+.gitignore
+.gitattributes
+
+.vs
+
+bin/
+obj/
+
+docker-compose.yml
+docker-compose.override.yml
+
+.env
