@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Text;
@@ -10,7 +9,6 @@ class Program
 {
     static async Task Main()
     {
-
         //Find out the project root
         //change path for docker vs. local
         string baseDir = AppContext.BaseDirectory;
@@ -28,12 +26,18 @@ class Program
 
         string filePath = Path.Combine(htmlDir, "raid1.html");
 
+        if (!File.Exists(filePath))
+        {
+            Console.WriteLine($"ERROR: HTML file not found at: {filePath}");
+            return;
+        }
+
         //Load webhook URL from .env
-        string? webhookUrl = LoadWebhookUrl(projectRoot);
+        string? webhookUrl = LoadWebhookUrl();
         if (string.IsNullOrWhiteSpace(webhookUrl))
         {
-            Console.WriteLine("ERROR: Could not find DISCORD_WEBHOOK_URL in .env");
-            Console.WriteLine($"Expected .env at: {Path.Combine(projectRoot, ".env")}");
+            Console.WriteLine("ERROR: Could not find DISCORD_WEBHOOK_URL.");
+            Console.WriteLine("Expected it either as an environment variable or in a .env file next to the executable.");
             return;
         }
 
@@ -96,9 +100,9 @@ class Program
         Console.WriteLine("\nDone.");
     }
 
-    private static string? LoadWebhookUrl(string projectRoot)
+    private static string? LoadWebhookUrl()
     {
-        // check env variable for docker
+        //Environment variable (used in CI/CD / Azure VM)
         string? webhookUrl = Environment.GetEnvironmentVariable("DISCORD_WEBHOOK_URL");
         if (!string.IsNullOrWhiteSpace(webhookUrl))
         {
@@ -106,8 +110,11 @@ class Program
             return webhookUrl;
         }
 
-        // use .env file for local dev
-        string envPath = Path.Combine(projectRoot, ".env");
+        //Fallback: .env file next to the executable
+        string baseDir = AppContext.BaseDirectory;
+        string envPath = Path.Combine(baseDir, ".env");
+
+        Console.WriteLine($"WARNING: DISCORD_WEBHOOK_URL not found in environment. Looking for .env at: {envPath}");
 
         if (!File.Exists(envPath))
         {
@@ -132,10 +139,12 @@ class Program
 
             if (key.Equals("DISCORD_WEBHOOK_URL", StringComparison.OrdinalIgnoreCase))
             {
+                Console.WriteLine("Loaded DISCORD_WEBHOOK_URL from .env file");
                 return value;
             }
         }
 
+        Console.WriteLine("ERROR: DISCORD_WEBHOOK_URL not found in .env file.");
         return null;
     }
 
