@@ -7,13 +7,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+    <!-- Exclude test project from main project compilation -->
   <ItemGroup>
-    <Compile Include="src/**/*.cs" />
-  </ItemGroup>
-
-  <!-- Exclude all test project files from main project -->
-  <ItemGroup>
-    <Compile Remove="SWGOH-Raid_Scraper.Tests/**/*.cs" />
+    <Compile Remove="SWGOH-Raid_Scraper.Tests/**" />
     <None Remove="SWGOH-Raid_Scraper.Tests/**" />
     <EmbeddedResource Remove="SWGOH-Raid_Scraper.Tests/**" />
   </ItemGroup>
@@ -24,3 +20,4 @@
   </ItemGroup>
 
 </Project>
+
