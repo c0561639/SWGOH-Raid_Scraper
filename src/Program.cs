@@ -8,19 +8,25 @@ using HtmlAgilityPack;
 
 class Program
 {
-    //Guild’s raid-history base URL
-    private const string GuildRaidBaseUrl =
-        "https://swgoh.gg/g/nA8P3kQJRMyA7VqglhVOqQ/raid-history/";
-
-    //Folder where local HTML saves are stored
-    private const string HtmlFolder = "html_files";
-
     static async Task Main()
     {
+
         //Find out the project root
-        string projectRoot = Path.GetFullPath(
-            Path.Combine(AppContext.BaseDirectory, "..", "..", "..")
-        );
+        //change path for docker vs. local
+        string baseDir = AppContext.BaseDirectory;
+        string htmlDir = Path.Combine(baseDir, "html");
+        string projectRoot = baseDir;
+
+        // If html doesn't exist in the app directory, try going up to project root (local dev)
+        if (!Directory.Exists(htmlDir))
+        {
+            projectRoot = Path.GetFullPath(
+                Path.Combine(baseDir, "..", "..", "..")
+            );
+            htmlDir = Path.Combine(projectRoot, "html");
+        }
+
+        string filePath = Path.Combine(htmlDir, "raid1.html");
 
         //Load webhook URL from .env
         string? webhookUrl = LoadWebhookUrl(projectRoot);
@@ -30,53 +36,6 @@ class Program
             Console.WriteLine($"Expected .env at: {Path.Combine(projectRoot, ".env")}");
             return;
         }
-
-        Console.WriteLine("Enter the raid ID (the part after /raid-history/), e.g. bb0ea6749c:");
-        string raidId = Console.ReadLine()?.Trim() ?? "";
-        raidId = raidId.Trim('/');
-
-        if (string.IsNullOrWhiteSpace(raidId))
-        {
-            Console.WriteLine("No raid ID entered. Exiting.");
-            return;
-        }
-
-        //Build full SWGOH.GG URL
-        string raidUrl = GuildRaidBaseUrl + raidId + "/";
-
-        Console.WriteLine($"\nOpening raid page in your default browser:\n{raidUrl}\n");
-        Process.Start(new ProcessStartInfo
-        {
-            FileName = raidUrl,
-            UseShellExecute = true
-        });
-
-        //Ensure html_files exists at project root
-        string htmlDir = Path.Combine(projectRoot, HtmlFolder);
-        if (!Directory.Exists(htmlDir))
-        {
-            Directory.CreateDirectory(htmlDir);
-            Console.WriteLine($"Created folder: {htmlDir}");
-        }
-
-        Console.WriteLine("When the page finishes loading:");
-        Console.WriteLine($"  1) Press CTRL+S in your browser");
-        Console.WriteLine($"  2) Save the page as: {raidId}.html");
-        Console.WriteLine($"  3) Save it into this folder:\n     {htmlDir}");
-        Console.WriteLine("\nPress ENTER here once you've saved the file...");
-        Console.ReadLine();
-
-        //Expected file path: <projectRoot>/html_files/<raidId>.html
-        string filePath = Path.Combine(htmlDir, raidId + ".html");
-
-        if (!File.Exists(filePath))
-        {
-            Console.WriteLine($"ERROR: File not found: {filePath}");
-            Console.WriteLine("Did you save it with the correct name and in the correct folder?");
-            return;
-        }
-
-        Console.WriteLine("\nParsing raid HTML...");
 
         string html = File.ReadAllText(filePath);
         var doc = new HtmlDocument();
@@ -115,11 +74,11 @@ class Program
         string discordMessage;
         if (!foundMissing)
         {
-            discordMessage = $"**Raid `{raidId}` Report:**\nAll members contributed!";
+            discordMessage = $"**Raid Report:**\nAll members contributed!";
         }
         else
         {
-            discordMessage = $"**Raid `{raidId}` - Players with no raid score:**\n{missingList}";
+            discordMessage = $"**Raid - Players with no raid score:**\n{missingList}";
         }
 
         Console.WriteLine("\nSending report to Discord...");
@@ -134,12 +93,20 @@ class Program
             Console.WriteLine(ex.Message);
         }
 
-        Console.WriteLine("\nDone. Press any key to exit.");
-        Console.ReadKey();
+        Console.WriteLine("\nDone.");
     }
 
     private static string? LoadWebhookUrl(string projectRoot)
     {
+        // check env variable for docker
+        string? webhookUrl = Environment.GetEnvironmentVariable("DISCORD_WEBHOOK_URL");
+        if (!string.IsNullOrWhiteSpace(webhookUrl))
+        {
+            Console.WriteLine("Loaded DISCORD_WEBHOOK_URL from environment variable");
+            return webhookUrl;
+        }
+
+        // use .env file for local dev
         string envPath = Path.Combine(projectRoot, ".env");
 
         if (!File.Exists(envPath))
