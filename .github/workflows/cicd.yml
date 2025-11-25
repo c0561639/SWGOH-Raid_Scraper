@@ -69,11 +69,7 @@ jobs:
         username: ${{ secrets.AZURE_VM_USERNAME }}
         key: ${{ secrets.AZURE_VM_KEY }}
         script: |
-          cd ~/swgoh-raid-scraper/build
-          echo "DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}" > .env
-          pkill -f "SWGOH-Raid_Scraper.dll" || true
-          nohup dotnet SWGOH-Raid_Scraper.dll > log.txt 2>&1 &
-          disown -a || true
-          exit 0
-
+          cd ~/swgoh-raid-scraper
+          pkill -f "SWGOH_Raid_Scraper.dll" || true
+          nohup dotnet SWGOH_Raid_Scraper.dll > log.txt 2>&1 &
 
