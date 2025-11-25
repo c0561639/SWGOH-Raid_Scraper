@@ -10,17 +10,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+  <!-- Exclude test project from main project compilation -->
+    <Compile Include="src\**\*.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <!-- Exclude test project from main project compilation -->
-    <Compile Include="src\**\*.cs" />
-    <Compile Remove="SWGOH-Raid_Scraper.Tests\**" />
-    <EmbeddedResource Remove="SWGOH-Raid_Scraper.Tests\**" />
-    <None Remove="SWGOH-Raid_Scraper.Tests\**" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
 
 </Project>
