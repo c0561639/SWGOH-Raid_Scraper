@@ -1,0 +1,9 @@
+services:
+  swgoh-raid-scraper:
+    build: .
+    environment:
+      - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
+    env_file:
+      - .env
+    volumes:
+      - ./html:/app/html

@@ -2,7 +2,7 @@
 
 namespace SWGOH_Raid_Scraper.Tests;
 
-public class SimpleTests
+public class Tests
 {
     [Fact]
     public void Test1()
