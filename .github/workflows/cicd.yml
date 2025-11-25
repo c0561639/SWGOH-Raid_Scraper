@@ -37,8 +37,8 @@ jobs:
     - name: Publish
       run: dotnet publish SWGOH-Raid_Scraper.csproj --configuration Release --output ./build --no-build
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build-and-test
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   needs: build-and-test
 
-    steps:
+  #   steps:
