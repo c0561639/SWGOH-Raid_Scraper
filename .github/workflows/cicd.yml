@@ -35,7 +35,7 @@ jobs:
       run: dotnet test SWGOH-Raid_Scraper.sln --configuration Release --no-build --verbosity normal
 
     - name: Publish
-      run: dotnet publish SWGOH-Raid_Scraper.csproj --configuration Release --output ./build --no-build
+      run: dotnet publish SWGOH-Raid_Scraper.csproj -c Release -o build
 
   deploy:
     runs-on: ubuntu-latest

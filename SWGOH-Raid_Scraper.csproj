@@ -3,23 +3,24 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
-    <RootNamespace>SWGOH_Raid_Scraper</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <Compile Include="src/**/*.cs" />
   </ItemGroup>
 
   <!-- Exclude all test project files from main project -->
   <ItemGroup>
-    <Compile Remove="SWGOH-Raid_Scraper.Tests\**\*.cs" />
-    <EmbeddedResource Remove="SWGOH-Raid_Scraper.Tests\**" />
-    <None Remove="SWGOH-Raid_Scraper.Tests\**" />
+    <Compile Remove="SWGOH-Raid_Scraper.Tests/**/*.cs" />
+    <None Remove="SWGOH-Raid_Scraper.Tests/**" />
+    <EmbeddedResource Remove="SWGOH-Raid_Scraper.Tests/**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
 
 </Project>
