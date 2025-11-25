@@ -37,8 +37,28 @@ jobs:
     - name: Publish
       run: dotnet publish SWGOH-Raid_Scraper.csproj --configuration Release --output ./build --no-build
 
-  # deploy:
-  #   runs-on: ubuntu-latest
-  #   needs: build-and-test
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-and-test
 
-  #   steps:
+    steps:
+    - name: Copy build artifacts to Azure VM
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.AZURE_VM_HOST }}
+        username: ${{ secrets.AZURE_VM_USERNAME }}
+        key: ${{ secrets.AZURE_VM_KEY }}
+        source: "build/*"
+        target: "~/swgoh-raid-scraper"
+
+    - name: Start scraper on Azure VM
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.AZURE_VM_HOST }}
+        username: ${{ secrets.AZURE_VM_USERNAME }}
+        key: ${{ secrets.AZURE_VM_KEY }}
+        script: |
+          cd ~/swgoh-raid-scraper
+          pkill -f "SWGOH_Raid_Scraper.dll" || true
+          nohup dotnet SWGOH_Raid_Scraper.dll > log.txt 2>&1 &
+
