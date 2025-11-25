@@ -69,7 +69,7 @@ jobs:
         username: ${{ secrets.AZURE_VM_USERNAME }}
         key: ${{ secrets.AZURE_VM_KEY }}
         script: |
-          cd ~/swgoh-raid-scraper
+          cd ~/swgoh-raid-scraper/build
           pkill -f "SWGOH-Raid_Scraper.dll" || true
           nohup dotnet SWGOH-Raid_Scraper.dll > log.txt 2>&1 &
 
