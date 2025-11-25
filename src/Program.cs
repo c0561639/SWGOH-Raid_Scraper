@@ -94,6 +94,7 @@ class Program
         }
 
         Console.WriteLine("\nDone.");
+        Console.ReadLine();
     }
 
     private static string? LoadWebhookUrl(string projectRoot)
