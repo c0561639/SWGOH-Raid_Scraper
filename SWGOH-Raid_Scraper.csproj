@@ -15,11 +15,4 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
 
-  <ItemGroup>
-    <!-- Exclude test project from main project compilation -->
-    <Compile Remove="SWGOH-Raid_Scraper.Tests\**" />
-    <EmbeddedResource Remove="SWGOH-Raid_Scraper.Tests\**" />
-    <None Remove="SWGOH-Raid_Scraper.Tests\**" />
-  </ItemGroup>
-
 </Project>
