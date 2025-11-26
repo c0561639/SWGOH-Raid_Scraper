@@ -6,6 +6,7 @@
 
 bin/
 obj/
+build/
 
 docker-compose.yml
 docker-compose.override.yml
